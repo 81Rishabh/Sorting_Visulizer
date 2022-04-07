@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting visulizer</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+     <main id="main-container">
+      <section id="sidebar">
+        <nav>
+          <div>
+             <label for="width">width</label><br>
+            <input type="number"  id="width-input-box" name="width" min="25" max="100">
+          </div>
+          <div class="gradient-border">
+            <button type="button" id="generator-button">Generate bars</button>
+          </div>
+          <div class="gradient-border">
+            <button type="button" id="bubble-sort-button">bubble Sort</button>
+          </div>
+          <div class="gradient-border">
+            <button type="button" id="insertion-sort-button">Insertion Sort</button>
+          </div>
+       </nav>
+      </section>
+       <section>
+          <div id="bars-container">
+          
+          </div>
+       </section>
+     </main>
+    <script src="./sorting_visulization.js"></script>
+</body>
+</html>

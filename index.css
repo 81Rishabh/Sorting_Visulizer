@@ -1,0 +1,107 @@
+* {
+    box-shadow:border-box;
+  }
+
+  body {
+    margin : 0;
+    padding:  0;
+  }
+
+  main {
+    display : flex;
+  }
+
+  #sidebar {
+    width : 20%;
+    background-color : rgb(8, 8, 49);
+    height : 95vh;
+    padding: 2rem 0;
+  }
+  
+#sidebar + section {
+  width : 80%;
+  display : flex;
+  justify-content : center;
+  background-color :whitesmoke;
+}
+
+#sidebar nav {
+  display : flex;
+  flex-direction: column;
+  align-items :center;
+  justify-content : center;
+ }
+  
+  .gradient-border > button {
+    padding : .5rem .75rem;
+    background-color : #000;
+    color: #fff;
+    font-family: 'Operator Mono' , sans-serif;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    width : 100%;
+  }
+
+  .gradient-border {
+     width: 150px;
+     display: inline-block;
+     background: linear-gradient(90deg, rgba(22,190,151,1) 0%, rgba(175,0,255,1) 98%);
+     padding: 3px;
+     border-radius: 5px;
+     margin:10px;
+     transition: all 1s linear;
+  }
+
+
+  .gradient-border:hover  button{
+     transform: scale(.98);
+     transition: all .3s linear;
+  }
+  
+  #bars-container {
+    display : flex;
+    width : 90%;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  .bars {
+    width : 30px;
+    background-color : blueviolet;
+    margin : 0px 1px;
+    position  : relative;
+  }
+
+  .heights {
+    position : absolute;
+    top : 100%;
+    left :25%;
+  }
+ .border-red {
+   border: 2px solid red;
+ }
+
+ .border-blue {
+   border: 2px solid blue;
+ }
+
+ #width-input-box {
+    width: 150px;
+    height:40px;
+    margin: 0;
+    border-radius: 5px;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid blueviolet;
+    margin: 10px 0px;
+    padding-left: 10px;
+    outline: none;
+ }
+
+ label {
+   color : #fff;
+   font-family: 'Operator Mono';
+   margin-bottom: 5px;
+ }
