@@ -1,19 +1,29 @@
 const bars_container = document.getElementById("bars-container");
 
-
-
-var DEFAULT_BARS_COUNT = localStorage.getItem('bars_count');
+// set default count of bars while global context is created
+var DEFAULT_BARS_COUNT = localStorage.getItem("bars_count");
 let randomNumber = [];
 var isGenerated = false;
 var inputBoxFired = false;
 
 // change width via input
 function changeWidth(e) {
-    getVal = localStorage.getItem('bars_count');
-    if(getVal != null) {
-       localStorage.removeItem("bars_count");
-    }
-    localStorage.setItem('bars_count' , e.target.value);
+  getVal = localStorage.getItem("bars_count");
+
+  // if localstorage is Emapty will return null
+  if (getVal != null) {
+    localStorage.removeItem("bars_count");
+  }
+
+  // check is value is greater than 100
+  if (e.target.value > 150) {
+    alert("Please enter value less than 100 by default value would be 25");
+    localStorage.setItem("bars_count", 25);
+    return;
+  }
+
+  // storting value on local storage
+  localStorage.setItem("bars_count", e.target.value);
 }
 
 // Reder bars over the browser while doucment loaded first
@@ -22,10 +32,11 @@ function randomGenerator(DEFAULT_BARS_COUNT) {
     randomNumber = [];
     isGenerated = false;
     location.reload();
-    
   } else {
     for (let i = 0; i < DEFAULT_BARS_COUNT; i++) {
-      randomNumber.push(Math.max(5, Math.floor(Math.random() * DEFAULT_BARS_COUNT)));
+      randomNumber.push(
+        Math.max(5, Math.floor(Math.random() * DEFAULT_BARS_COUNT))
+      );
     }
     isGenerated = true;
   }
@@ -49,12 +60,12 @@ function createBars(heights) {
 
 const bars = document.querySelectorAll(".bars");
 // bars color context
-var PRIMARY_COLOR = "red";
-var SECONDARY_COLOR = "blue";
+var PRIMARY_COLOR = "lightpink";
+var SECONDARY_COLOR = "darkpink";
 var SORTED_COLOR = "green";
 var DEFAULT = "blueviolet";
-var ANIMATION_SPEED = 100;
-var REVMOVE_SPEED = 1;
+
+
 
 // bubble sort
 function bubbleSort() {
@@ -64,7 +75,7 @@ function bubbleSort() {
         setTimeout(function () {
           if (randomNumber[i + 1] < randomNumber[i]) {
             bars[i].style.backgroundColor = PRIMARY_COLOR;
-
+            bars[i+1].style.backgroundColor = SECONDARY_COLOR;  
             //  swappin values
             swap(randomNumber, i, i + 1);
             var height1 = randomNumber[i];
@@ -78,10 +89,11 @@ function bubbleSort() {
           //  reseting background color after comparing them
           setTimeout(function () {
             bars[i].style.backgroundColor = DEFAULT;
-          }, REVMOVE_SPEED);
-        }, i * ANIMATION_SPEED);
+            bars[i+1].style.backgroundColor = DEFAULT;
+          }, 1);
+        }, i * 100);
       }
-    }, j * 1000);
+    }, j * 500);
   }
 }
 
@@ -109,24 +121,177 @@ function insertionSort() {
             bars[j].firstChild.innerHTML = temp;
 
             randomNumber[j] = temp;
-            bars[j + 1].style.backgroundColor = SORTED_COLOR;
+            bars[j + 1].style.backgroundColor = SECONDARY_COLOR;
             bars[j].style.height = temp + "px";
           }
 
           //  Removing background
           setTimeout(function () {
             bars[j + 1].style.backgroundColor = DEFAULT;
-          }, 100);
-        }, k * 250);
+          }, 75);
+        }, k * 150);
       }
 
       // remove PRIMARY backgroundColor backgroundColor
       setTimeout(function () {
         bars[i].style.backgroundColor = DEFAULT;
-      }, i * 500);
-    }, i * 1000);
+      }, i * 250);
+    }, i * 500);
   }
 }
+
+// Seclection Sort
+function selectionSort() {
+  for (let i = 0; i < randomNumber.length - 1; i++) {
+    setTimeout(function () {
+      let min = i;
+      for (let j = i + 1; j < randomNumber.length; j++) {
+        setTimeout(function () {
+          if (randomNumber[j] < randomNumber[min]) {
+            min = j;
+          }
+        }, 100);
+      }
+
+      setTimeout(function () {
+        bars[min].style.backgroundColor = PRIMARY_COLOR;
+        bars[i].style.backgroundColor = SECONDARY_COLOR;
+        setTimeout(function () {
+          //  swaping
+          var temp = randomNumber[min];
+          randomNumber[min] = randomNumber[i];
+          //  updating height: ;
+          bars[min].style.height = randomNumber[min] + "px";
+          bars[min].firstChild.innerHTML = randomNumber[min];
+
+          //  updatign innretext height
+          randomNumber[i] = temp;
+          bars[i].firstChild.innerHTML = randomNumber[i];
+          bars[i].style.height = randomNumber[i] + "px";
+        }, 100);
+        setTimeout(function () {
+          bars[min].style.backgroundColor = DEFAULT;
+          bars[i].style.backgroundColor = DEFAULT;
+        }, 100);
+      }, 100);
+    }, i * 250);
+  }
+}
+
+
+
+// merge sort Helper
+function mergeSortHelper(){
+  var animations = [];
+  mergeSort(randomNumber , 0 , randomNumber.length - 1 , animations);
+  console.log(animations);
+ 
+ for(let i = 0; i < animations.length; i++) {
+    var array_bars = document.querySelectorAll('.bars');
+    const isColorChange = i % 3 !== 2;
+    if(isColorChange) {
+      const [oneIdx  , twoIdx] = animations[i];
+      const oneIdxStyle = array_bars[oneIdx].style;
+      const twoIdxStyle = array_bars[twoIdx].style;
+      const color = i % 3 !== 0 ? SECONDARY_COLOR : DEFAULT;
+       
+      setTimeout(function () {
+        oneIdxStyle.backgroundColor = color;
+        twoIdxStyle.backgroundColor = color;
+      }, i * 10)
+    }
+    else {
+       setTimeout(function () {
+        const [barIdx   , barHeight] = animations[i];
+        const barOneStyle = array_bars[barIdx].style;
+        barOneStyle.height = barHeight + 'px';
+       },i * 10)
+    } 
+ }
+}
+
+
+// Merge sorting Algorithms
+function mergeSort(arr, low, high,animations) {
+  if (low < high) {
+    var mid = Math.floor((low + high) / 2);
+    mergeSort(arr, low, mid,animations);
+    mergeSort(arr, mid + 1, high,animations);
+    // Mergin two sorted  arrays
+    merge(arr, low, high, mid,animations);
+  }
+  return arr;
+}
+
+function merge(arr, low, high, mid,animations) {
+  var i = low;
+  var j = mid + 1;
+  var k = i;
+  
+  // auxillary arr for storing sorted element
+  var ans = [];
+  while (i <= mid && j <= high) {
+    // These are the value that we are comparint;
+    // to change their color
+    animations.push([i , j]);
+
+    // These are the value that we are comparint;
+    // to revert their color
+    animations.push([i , j]);
+    if (arr[i] < arr[j]) {
+
+      // we overwrite the value of index k in original array with the
+      // value at index i in the auxillary array
+      animations.push([k , arr[i]]);
+      ans[k++] = arr[i++];
+    } else {
+
+      // we overwrite the value of index k in original array with the
+      // value at index i in the auxillary array
+      animations.push([k , arr[j]]);
+      ans[k++] = arr[j++];
+    }
+  }
+
+  //    if first half arr has an elements
+    while (i <= mid) {
+      // These are the value that we are comparint;
+     // to change their color
+      animations.push([i , i]);
+
+      // These are the value that we are comparint;
+    // to revert their color
+      animations.push([i , i]);
+
+      // we overwrite the value of index k in original array with the
+      // value at index i in the auxillary array
+      animations.push([k , arr[i]]);
+      ans[k++] = arr[i++];
+    }
+
+    // if second  half arr has an elements
+    while (j <= high) {
+      // These are the value that we are comparint;
+     // to change their color
+      animations.push([j , j]);
+
+       // These are the value that we are comparint;
+     // to revert their color
+      animations.push([j , j]);
+      
+        // we overwrite the value of index k in original array with the
+      // value at index i in the auxillary array
+      animations.push([k , arr[j]]);
+      ans[k++] = arr[j++];
+    }
+ 
+    //  coping Array element form auxillary arr to original array
+    for (let k = low; k <= high; k++) {
+        arr[k] = ans[k];
+    }
+}
+
+
 
 //  Swaping
 function swap(arr, i, j) {
@@ -135,13 +300,12 @@ function swap(arr, i, j) {
   arr[j] = temp;
 }
 
-
 // Event Listeners
 var widthInput = document.getElementById("width-input-box");
 widthInput.addEventListener("change", changeWidth);
 
 // change attribute value
-widthInput.setAttribute("value", localStorage.getItem("bars_count"))
+widthInput.setAttribute("value", localStorage.getItem("bars_count"));
 
 document
   .getElementById("generator-button")
@@ -152,3 +316,10 @@ document
 document
   .getElementById("insertion-sort-button")
   .addEventListener("click", insertionSort);
+document
+  .getElementById("selection-sort-button")
+  .addEventListener("click", selectionSort);
+
+document
+  .getElementById("merge-sort-button")
+  .addEventListener("click", mergeSortHelper);
